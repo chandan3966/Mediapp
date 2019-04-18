@@ -34,6 +34,7 @@ public class Maps extends FragmentActivity implements LocationListener, OnMapRea
     String phone,pass;
     private MarkerOptions options = new MarkerOptions();
     private ArrayList<LatLng> latlong = new ArrayList<>();
+    private ArrayList<String> names = new ArrayList<>();
     double lat,longi,nlat,nlong;
     SharedPreferences sp;
     private GoogleMap mMap;
@@ -78,7 +79,7 @@ public class Maps extends FragmentActivity implements LocationListener, OnMapRea
         else {
 
         }
-        Toast.makeText(this, ""+ lat,Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, ""+ lat,Toast.LENGTH_LONG).show();
 //        mMap.addMarker(new MarkerOptions().position(home).title(phone));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, zoomLevel));
     }
@@ -107,22 +108,32 @@ public class Maps extends FragmentActivity implements LocationListener, OnMapRea
 //        float zoomLevel = (float) 5.0;
 //        mMap.addMarker(new MarkerOptions().position(home).title(phone));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, zoomLevel));
-        for (LatLng point : latlong) {
-            options.position(point);
-            options.title("someTitle");
-            options.snippet("someDesc");
+        int i=0;
+        while(i<latlong.size()){
+            options.position(latlong.get(i));
+            options.title(names.get(i));
             googleMap.addMarker(options);
+            i++;
         }
-
+//        for (LatLng point : latlong) {
+//            options.position(point);
+////            options.title("someTitle");
+//            googleMap.addMarker(options);
+//        }
+//        for (String point1 : numbers) {
+//            options.title(point1);
+////            googleMap.addMarker(options);
+//        }
     }
 
 
     public void latuslongus() {
         Cursor c = db.rawQuery("SELECT * FROM logins", null);
         while (c.moveToNext()) {
-            nlat =  c.getDouble(2);
-            nlong =  c.getDouble(3);
+            nlat =  c.getDouble(3);
+            nlong =  c.getDouble(4);
             latlong.add(new LatLng(nlat, nlong));
+            names.add(c.getString(0));
         }
     }
 }
